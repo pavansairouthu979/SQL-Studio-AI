@@ -1,0 +1,30 @@
+# Environment & Secret files
+.env
+.streamlit/secrets.toml
+
+# Python Virtual Environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS System Files
+.DS_Store
+Thumbs.db
+
+# Temporary SQLite files
+*.db-journal
+*.db-wal
+*.db-shm
