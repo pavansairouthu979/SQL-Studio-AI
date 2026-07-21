@@ -29,6 +29,7 @@ Convert plain English questions into executable SQLite queries, inspect live dat
 - **Database**: SQLite3
 - **Data Analytics & Charts**: [Pandas](https://pandas.pydata.org/)
 - **Environment**: `python-dotenv`
+- **Deployment Service**: [Render](https://render.com/) (via `render.yaml`)
 
 ---
 
@@ -41,7 +42,7 @@ sqlproject/
 ├── students.db         # Relational SQLite database file
 ├── requirements.txt    # Required Python dependencies
 ├── .env                # API Key configuration file
-├── Dockerfile          # Container configuration for server deployment
+├── render.yaml         # Render deployment configuration blueprint
 └── README.md           # Enterprise project documentation
 ```
 
@@ -92,7 +93,29 @@ Access the live app at `http://localhost:8501`.
 
 ## 🌐 Server Deployment Guide
 
-### Option 1: Streamlit Community Cloud (Recommended & Free)
+### Option 1: Deploy on Render (Recommended Service)
+
+#### Method A: Automatic Deployment (using `render.yaml`)
+1. Push your repository to **GitHub**.
+2. Log into [Render](https://render.com/).
+3. Click **New +** -> **Blueprint**.
+4. Connect your GitHub repository. Render will automatically read `render.yaml` and configure your build command, start command, and port.
+5. Set your `API_KEY` under Environment Variables and click **Apply**.
+
+#### Method B: Manual Deployment
+1. Push project to GitHub.
+2. Go to [Render Dashboard](https://dashboard.render.com/) and click **New +** -> **Web Service**.
+3. Connect your repository and set the configuration:
+   - **Environment**: `Python 3`
+   - **Build Command**: `pip install -r requirements.txt && python sql.py`
+   - **Start Command**: `streamlit run app.py --server.port $PORT --server.address 0.0.0.0`
+4. Add Environment Variable:
+   - Key: `API_KEY` | Value: `YOUR_GEMINI_API_KEY`
+5. Click **Deploy Web Service**.
+
+---
+
+### Option 2: Streamlit Community Cloud (Free Alternative)
 1. Push your project to a **GitHub Repository**.
 2. Go to [share.streamlit.io](https://share.streamlit.io/) and log in with GitHub.
 3. Click **"New App"** and select your repository, branch (`main`), and main file path (`app.py`).
@@ -101,32 +124,6 @@ Access the live app at `http://localhost:8501`.
    API_KEY = "YOUR_GEMINI_API_KEY"
    ```
 5. Click **Deploy!** Your app will be live on a public URL (`https://your-app.streamlit.app`).
-
----
-
-### Option 2: Deploy on Render / Railway
-1. Push project to GitHub.
-2. Create a new **Web Service** on [Render](https://render.com/).
-3. Set configuration:
-   - **Environment**: Python 3
-   - **Build Command**: `pip install -r requirements.txt && python sql.py`
-   - **Start Command**: `streamlit run app.py --server.port $PORT --server.address 0.0.0.0`
-4. Add Environment Variable:
-   - Key: `API_KEY` | Value: `YOUR_GEMINI_API_KEY`
-5. Deploy Web Service.
-
----
-
-### Option 3: Deploy with Docker (VPS / AWS EC2 / DigitalOcean)
-Build and run the app as a Docker container using the included `Dockerfile`:
-
-```bash
-# Build the Docker Image
-docker build -t sql-studio-pro .
-
-# Run the Container
-docker run -d -p 8501:8501 --env API_KEY="YOUR_GEMINI_API_KEY" --name sql-studio sql-studio-pro
-```
 
 ---
 
